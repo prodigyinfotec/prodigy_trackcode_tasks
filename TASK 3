@@ -1,0 +1,86 @@
+#Implement a support vector machine (SVM) to classify images of cats and dogs from the Kaggle dataset.
+
+#CODE
+# installing the Kaggle library
+!pip install kaggle
+# configuring the path of Kaggle.json file
+!mkdir -p ~/.kaggle
+!cp kaggle.json ~/.kaggle/
+!chmod 600 ~/.kaggle/kaggle.json
+!kaggle competitions download -c dogs-vs-cats
+# extracting the compressed dataset
+from zipfile import ZipFile
+
+dataset = '/content/train.zip'
+
+with ZipFile(dataset, 'r') as zip:
+  zip.extractall()
+  print('The dataset is extracted')
+file_names = os.listdir('/content/train/')
+print(file_names)
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt 
+import matplotlib.image as mpimg
+from sklearn.model_selection import train_test_split
+from google.colab.patches import cv2_imshow 
+# display dog image
+img = mpimg.imread('/content/train/dog.8298.jpg')
+imgplt = plt.imshow(img)
+plt.show()
+file_names = os.listdir('/content/train/')
+
+dog_count = 0
+cat_count = 0
+
+for img_file in file_names:
+
+  name = img_file[0:3]
+
+  if name == 'dog':
+    dog_count += 1
+
+  else:
+    cat_count += 1
+
+print('Number of dog images =', dog_count)
+print('Number of cat images =', cat_count)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=2)
+num_of_classes = 2
+
+model = tf.keras.Sequential([
+    
+    pretrained_model,
+    tf.keras.layers.Dense(num_of_classes)
+
+])
+model.compile(
+    optimizer = 'adam',
+    loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics = ['acc']
+)
+input_image_path = input('Path of the image to be predicted: ')
+
+input_image = cv2.imread(input_image_path)
+
+cv2_imshow(input_image)
+
+input_image_resize = cv2.resize(input_image, (224,224))
+
+input_image_scaled = input_image_resize/255
+
+image_reshaped = np.reshape(input_image_scaled, [1,224,224,3])
+
+input_prediction = model.predict(image_reshaped)
+
+print(input_prediction)
+
+input_pred_label = np.argmax(input_prediction)
+
+print(input_pred_label)
+
+if input_pred_label == 0:
+  print('The image represents a Cat')
+
+else:
+  print('The image represents a Dog')
