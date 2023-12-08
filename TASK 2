@@ -1,0 +1,27 @@
+#Create a K-means clustering algorithm to group customers of a retail store based on their purchase history.
+
+#CODE
+Import necessary libraries
+import pandas as pd
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Load the dataset (replace 'Mall_Customers.csv' with the actual file path)
+data = pd.read_csv('path_to_your_downloaded_folder/Mall_Customers.csv')
+
+# Select relevant features for clustering (e.g., 'Annual Income' and 'Spending Score')
+X = data[['Annual Income (k$)', 'Spending Score (1-100)']]
+
+# Choose the number of clusters (you can adjust this based on your analysis)
+num_clusters = 5
+
+# Create and fit the K-means model
+kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+data['Cluster'] = kmeans.fit_predict(X)
+
+# Visualize the clusters
+plt.scatter(X['Annual Income (k$)'], X['Spending Score (1-100)'], c=data['Cluster'], cmap='rainbow')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.title('K-means Clustering of Customers')
+plt.show()
